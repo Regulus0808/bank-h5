@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>华夏银行厦门分行私行中心</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+    --black: #0a0a0a;
+    --black-card: #141414;
+    --black-light: #1c1c1c;
+    --gold: #d4af37;
+    --gold-bright: #e8cc6e;
+    --gold-dark: #b8942e;
+    --gold-deep: #8b6914;
+    --white: #ffffff;
+    --warm: #faf9f5;
+    --warm-dark: #f3f1ea;
+    --muted: #999999;
+}
+
+html {
+    scroll-snap-type: y mandatory;
+    -webkit-overflow-scrolling: touch;
+}
+
+body {
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", system-ui, sans-serif;
+    color: var(--white);
+    background: var(--black);
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
+}
+
+/* ============ 通用 ============ */
+.screen {
+    min-height: 100vh;
+    min-height: 100dvh;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 60px 24px;
+}
+
+.screen-inner {
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.section-tag {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    padding: 5px 18px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(212,175,55,0.2);
+}
+
+.section-h2 {
+    font-size: 1.5rem;
+    font-weight: 400;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+    position: relative;
+    display: inline-block;
+}
+
+.section-h2::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-bright), transparent);
+    transition: width 1.2s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.section-h2.line-visible::after { width: 80px; }
+
+/* ============ 黑金纹理 SVG 背景 ============ */
+.texture-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 30 L30 0 M30 60 L60 30 M0 0 L30 30 L60 0 M0 60 L30 30 L60 60' stroke='%23d4af37' stroke-width='0.4' fill='none'/%3E%3C/svg%3E");
+}
+
+/* ============ 角标装饰 ============ */
+.corner-deco {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.15;
+}
+.corner-deco::before, .corner-deco::after {
+    content: '';
+    position: absolute;
+    background: var(--gold);
+}
+.corner-deco.tl { top: 20px; left: 20px; }
+.corner-deco.tl::before { width: 16px; height: 1px; top: 0; left: 0; }
+.corner-deco.tl::after { width: 1px; height: 16px; top: 0; left: 0; }
+.corner-deco.br { bottom: 20px; right: 20px; }
+.corner-deco.br::before { width: 16px; height: 1px; bottom: 0; right: 0; }
+.corner-deco.br::after { width: 1px; height: 16px; bottom: 0; right: 0; }
+
+/* ============ Canvas 粒子 ============ */
+.particles-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
+/* ============ 屏1: 封面 ============ */
+.cover {
+    background: var(--black);
+    padding: 0 24px;
+    justify-content: center;
+}
+.cover-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.08;
+}
+.cover-bg img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.4) contrast(1.2);
+}
+.cover .screen-inner { text-align: center; z-index: 3; }
+.cover .bank-name {
+    font-size: 0.78rem;
+    font-weight: 300;
+    color: rgba(212,175,55,0.55);
+    letter-spacing: 0.28em;
+    margin-bottom: 56px;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 0.1s forwards;
+}
+
+.cover .ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 28px;
+}
+.cover .ornament .diamond {
+    width: 3px;
+    height: 3px;
+    background: var(--gold);
+    transform: rotate(45deg);
+    opacity: 0;
+    animation: diamondIn 0.6s ease-out 0.3s forwards;
+}
+.cover .ornament .diamond:nth-child(3) { animation-delay: 0.4s; }
+.cover .ornament .line {
+    width: 32px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--gold-bright), var(--gold), transparent);
+    position: relative;
+    overflow: hidden;
+}
+.cover .ornament .line::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(232,204,110,0.8), transparent);
+    animation: goldScan 2.8s ease-in-out infinite;
+}
+
+.cover .main-title {
+    font-size: 2.8rem;
+    font-weight: 200;
+    letter-spacing: 0.22em;
+    line-height: 1.6;
+    color: var(--white);
+    margin-bottom: 12px;
+    opacity: 0;
+    animation: fadeInUp 1s ease-out 0.35s forwards;
+    position: relative;
+    display: inline-block;
+}
+.cover .main-title b {
+    font-weight: 600;
+    background: linear-gradient(180deg, #e8cc6e 0%, #d4af37 40%, #8b6914 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.cover .main-title::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -20%;
+    width: 30%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(232,204,110,0.25), transparent);
+    transform: skewX(-20deg);
+    animation: goldScanText 3.5s ease-in-out infinite;
+}
+.cover .sub-title {
+    font-size: 0.92rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.38);
+    letter-spacing: 0.18em;
+    margin-bottom: 80px;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 0.5s forwards;
+}
+
+.scroll-hint {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+.scroll-hint .segments {
+    display: flex;
+    gap: 4px;
+}
+.scroll-hint .seg {
+    width: 1px;
+    height: 12px;
+    border-radius: 1px;
+    background: rgba(212,175,55,0.15);
+    animation: segPulse 1.8s ease-in-out infinite;
+}
+.scroll-hint .seg:nth-child(1) { animation-delay: 0s; }
+.scroll-hint .seg:nth-child(2) { animation-delay: 0.2s; }
+.scroll-hint .seg:nth-child(3) { animation-delay: 0.4s; }
+.scroll-hint .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    opacity: 0.4;
+    animation: dotBounce 2s ease-in-out infinite;
+}
+
+/* ============ 屏2: 概览 ============ */
+.overview {
+    background: var(--black);
+    padding: 80px 24px 100px;
+}
+.overview .bg-img-wrap {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    will-change: transform;
+}
+.overview .bg-img-wrap img {
+    width: 100%;
+    height: 130%;
+    object-fit: cover;
+    margin-top: -15%;
+    opacity: 0.55;
+    filter: brightness(0.25) contrast(1.1);
+}
+.overview .section-tag { border-color: rgba(212,175,55,0.15); }
+.overview .screen-inner { text-align: center; }
+
+.overview .intro-title {
+    font-size: 1.3rem;
+    font-weight: 300;
+    color: var(--gold-bright);
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+}
+.overview .intro-text {
+    font-size: 0.84rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 2;
+    margin-bottom: 32px;
+    letter-spacing: 0.04em;
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.overview .intro-text em {
+    font-style: normal;
+    color: var(--gold-bright);
+}
+.overview .stat-row {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    margin-bottom: 40px;
+}
+.overview .stat-item {
+    text-align: center;
+    position: relative;
+}
+.overview .stat-item::after {
+    content: '';
+    position: absolute;
+    top: 10%;
+    right: -14px;
+    width: 1px;
+    height: 60%;
+    background: rgba(255,255,255,0.06);
+}
+.overview .stat-item:last-child::after { display: none; }
+.overview .stat-num {
+    font-size: 2.6rem;
+    font-weight: 200;
+    color: var(--gold);
+    font-family: "Georgia", "Times New Roman", serif;
+    letter-spacing: 0.02em;
+}
+.overview .stat-num small { font-size: 1.3rem; font-weight: 300; }
+.overview .stat-text {
+    font-size: 0.76rem;
+    color: rgba(255,255,255,0.35);
+    margin-top: 6px;
+    letter-spacing: 0.12em;
+}
+.overview .highlight-box {
+    padding: 22px 28px;
+    border: 1px solid rgba(212,175,55,0.12);
+    border-radius: 8px;
+    max-width: 420px;
+    margin: 0 auto;
+    background: rgba(212,175,55,0.02);
+}
+.overview .highlight-box .hl-title {
+    font-size: 0.72rem;
+    color: var(--gold);
+    letter-spacing: 0.15em;
+    margin-bottom: 12px;
+}
+.overview .highlight-box p {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.9;
+    letter-spacing: 0.04em;
+}
+
+/* ============ 屏3: 服务 ============ */
+.services {
+    background: var(--warm);
+    color: var(--black);
+}
+.services .section-tag {
+    color: var(--gold-dark);
+    background: rgba(212,175,55,0.08);
+    border-color: transparent;
+}
+.services .section-h2 { color: var(--black); }
+.services .section-h2::after { left: 0; }
+.services .desc {
+    font-size: 0.84rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+    line-height: 1.7;
+    letter-spacing: 0.03em;
+}
+.services .desc-sub {
+    font-size: 0.8rem;
+    color: #aaa;
+    margin-bottom: 28px;
+    line-height: 1.7;
+    letter-spacing: 0.03em;
+}
+
+.service-cards { display: flex; flex-direction: column; gap: 12px; }
+
+.service-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    background: var(--white);
+    border-radius: 10px;
+    padding: 20px 18px;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.03);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #eee;
+}
+
+.service-card .svc-icon {
+    flex-shrink: 0;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+}
+.service-card .svc-icon.i1 { background: #f5f0e0; color: var(--gold-dark); }
+.service-card .svc-icon.i2 { background: #e8ecf2; color: #2a3a4a; }
+.service-card .svc-icon.i3 { background: #ebe5dc; color: #7a6555; }
+.service-card .svc-icon.i4 { background: #e8eef0; color: #2e5a5a; }
+.service-card .svc-info h4 {
+    font-size: 0.98rem;
+    color: var(--black);
+    margin-bottom: 4px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+}
+.service-card .svc-info p {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.65;
+}
+.service-card .svc-highlight {
+    display: inline-block;
+    font-size: 0.7rem;
+    color: var(--gold-dark);
+    background: rgba(212,175,55,0.06);
+    padding: 2px 10px;
+    border-radius: 4px;
+    margin-top: 6px;
+    letter-spacing: 0.06em;
+}
+
+/* 屏3 动画：左右交替滑入 */
+.slide-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.slide-right {
+    opacity: 0;
+    transform: translateX(50px);
+    transition: opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.slide-left.visible, .slide-right.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* ============ 屏4: 环境① ============ */
+.env-screen {
+    background: var(--black);
+    color: var(--white);
+}
+.env-screen .section-h2 { color: var(--white); }
+.env-screen .section-h2::after { left: 0; }
+.env-screen .env-desc {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 28px;
+    line-height: 1.9;
+    letter-spacing: 0.03em;
+}
+.env-screen .env-desc em { font-style: normal; color: var(--gold-bright); }
+.env-photos { display: flex; flex-direction: column; gap: 16px; }
+
+.env-photo-card {
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid rgba(212,175,55,0.12);
+    box-shadow: 0 0 0 4px rgba(212,175,55,0.03), 0 4px 30px rgba(0,0,0,0.4);
+}
+.env-photo-card img {
+    width: 100%;
+    display: block;
+    transition: transform 8s ease-out;
+}
+.env-photo-card:hover img { transform: scale(1.04); }
+.env-photo-card .photo-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 32px 20px 20px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.55));
+    color: #fff;
+    font-size: 0.88rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+}
+
+/* 屏4 动画：缩放展开 */
+.zoom-in {
+    opacity: 0;
+    transform: scale(0.7);
+    transition: opacity 0.8s cubic-bezier(0.22, 0.61, 0.36, 1),
+                transform 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.zoom-in.visible { opacity: 1; transform: scale(1); }
+
+/* ============ 屏5: 环境② ============ */
+.env-screen-alt {
+    background: var(--warm-dark);
+    color: var(--black);
+}
+.env-screen-alt .section-h2 { color: var(--black); }
+.env-screen-alt .section-h2::after { left: 0; }
+.env-screen-alt .env-desc {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 28px;
+    line-height: 1.9;
+    letter-spacing: 0.03em;
+}
+.env-screen-alt .env-desc em { font-style: normal; color: var(--gold-dark); }
+.env-screen-alt .env-photo-card {
+    border: 1px solid rgba(212,175,55,0.15);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+}
+
+/* 屏5 动画：底部上浮 + 弹簧 */
+.float-up {
+    opacity: 0;
+    transform: translateY(60px);
+    transition: opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.float-up.visible { opacity: 1; transform: translateY(0); }
+.float-up.spring-visible {
+    opacity: 1;
+    transform: translateY(0);
+    animation: springBack 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+}
+
+/* ============ 屏6: 团队 ============ */
+.team-screen {
+    background: var(--black);
+    color: var(--white);
+}
+.team-screen .section-h2 { color: var(--white); }
+.team-screen .section-h2::after { left: 0; }
+.team-screen .desc {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 28px;
+    line-height: 1.9;
+    letter-spacing: 0.03em;
+}
+.team-photos { display: flex; gap: 10px; }
+.team-photo-card {
+    flex: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(212,175,55,0.1);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+}
+.team-photo-card img {
+    width: 100%;
+    display: block;
+    transition: transform 8s ease-out;
+}
+
+.slide-from-left {
+    opacity: 0;
+    transform: translateX(-60px);
+    transition: opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.slide-from-right {
+    opacity: 0;
+    transform: translateX(60px);
+    transition: opacity 0.7s cubic-bezier(0.22, 0.61, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.slide-from-left.visible, .slide-from-right.visible {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.philosophy-box {
+    margin-top: 28px;
+    padding: 28px 24px;
+    border: 1px solid rgba(212,175,55,0.1);
+    border-radius: 10px;
+    text-align: center;
+    background: rgba(212,175,55,0.02);
+}
+.philosophy-box .quote-mark {
+    font-family: "Georgia", "Times New Roman", serif;
+    font-size: 3rem;
+    color: var(--gold);
+    opacity: 0.15;
+    line-height: 1;
+    margin-bottom: 12px;
+}
+.philosophy-box .quote-text {
+    font-size: 0.92rem;
+    color: rgba(255,255,255,0.6);
+    line-height: 2.2;
+    letter-spacing: 0.08em;
+}
+.philosophy-box .quote-author {
+    font-size: 0.76rem;
+    color: rgba(255,255,255,0.25);
+    margin-top: 16px;
+    letter-spacing: 0.12em;
+}
+
+.reveal-char {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+}
+.reveal-char.revealed { opacity: 1; transform: translateY(0); }
+
+/* ============ 屏7: 联系 ============ */
+.contact-screen {
+    background: var(--warm);
+    color: var(--black);
+}
+.contact-screen .section-h2 { color: var(--black); }
+.contact-screen .section-h2::after { left: 50%; transform: translateX(-50%); }
+.contact-screen .contact-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 28px auto;
+    color: var(--gold);
+    font-size: 1.5rem;
+}
+.contact-screen .contact-desc {
+    font-size: 0.82rem;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 32px;
+    line-height: 1.9;
+    letter-spacing: 0.03em;
+}
+.contact-cards { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+.contact-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: var(--white);
+    border-radius: 10px;
+    padding: 18px 20px;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.03);
+    border: 1px solid #eee;
+}
+.contact-card .icon-dot {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(212,175,55,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+.contact-card .cc-label {
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-bottom: 2px;
+    letter-spacing: 0.1em;
+}
+.contact-card .cc-value {
+    font-size: 0.92rem;
+    color: var(--black);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+}
+.contact-footer { text-align: center; }
+.contact-footer .commitment {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.8;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+}
+.contact-footer .divider {
+    width: 0;
+    height: 1px;
+    background: rgba(212,175,55,0.25);
+    margin: 16px auto;
+    transition: width 1s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.contact-footer .divider.extended { width: 36px; }
+.contact-footer .copyright {
+    font-size: 0.7rem;
+    color: #bbb;
+    letter-spacing: 0.08em;
+}
+
+/* 屏7 动画：弹跳弹出 */
+.bounce-in {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.6s cubic-bezier(0.22, 0.61, 0.36, 1),
+                transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.bounce-in.visible {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.5s ease-out,
+                transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ============ 淡入 ============ */
+.fade-in {
+    opacity: 0;
+    transition: opacity 0.8s ease-out;
+}
+.fade-in.visible { opacity: 1; }
+
+/* ============ 关键帧 ============ */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes diamondIn {
+    from { opacity: 0; transform: rotate(45deg) scale(0); }
+    to { opacity: 1; transform: rotate(45deg) scale(1); }
+}
+@keyframes goldScan {
+    from { transform: translateX(-100%); }
+    to { transform: translateX(200%); }
+}
+@keyframes goldScanText {
+    0%, 40% { left: -20%; opacity: 0; }
+    50%, 60% { opacity: 1; }
+    70%, 100% { left: 100%; opacity: 0; }
+}
+@keyframes segPulse {
+    0%, 100% { opacity: 0.12; height: 12px; }
+    50% { opacity: 0.5; height: 18px; }
+}
+@keyframes dotBounce {
+    0%, 100% { transform: translateY(0); opacity: 0.25; }
+    50% { transform: translateY(-8px); opacity: 0.7; }
+}
+@keyframes springBack {
+    from { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+    to { transform: translateY(0); }
+}
+
+/* ============ 响应式 ============ */
+@media (min-width: 480px) {
+    .service-cards { flex-direction: row; flex-wrap: wrap; }
+    .service-card { flex: 0 0 calc(50% - 6px); }
+}
+@media (max-width: 360px) {
+    .cover .main-title { font-size: 2.1rem; }
+    .overview .intro-text { font-size: 0.78rem; }
+    .overview .stat-row { gap: 16px; }
+    .overview .stat-num { font-size: 2rem; }
+    .screen { padding: 48px 16px; }
+}
+@media screen and (max-height: 600px) {
+    .screen { padding: 36px 20px; }
+    .cover .bank-name { margin-bottom: 28px; }
+    .cover .sub-title { margin-bottom: 40px; }
+    .cover .main-title { font-size: 2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================ -->
+<!-- 屏1: 封面 -->
+<!-- ============================================ -->
+<section class="screen cover" id="s1">
+    <div class="cover-bg">
+        <img src="bank-img/DAC04245.jpg" alt="">
+    </div>
+    <canvas class="particles-canvas" id="particles1"></canvas>
+    <div class="screen-inner">
+        <div class="bank-name">HUAXIA BANK XIAMEN</div>
+        <div class="ornament">
+            <span class="diamond"></span>
+            <span class="line"></span>
+            <span class="diamond"></span>
+        </div>
+        <h1 class="main-title">私行<b>中心</b></h1>
+        <p class="sub-title">尊享财富 · 传承致远</p>
+    </div>
+    <div class="scroll-hint">
+        <div class="segments">
+            <div class="seg"></div>
+            <div class="seg"></div>
+            <div class="seg"></div>
+        </div>
+        <div class="dot"></div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 屏2: 中心概览 -->
+<!-- ============================================ -->
+<section class="screen overview" id="s2">
+    <div class="texture-bg"></div>
+    <div class="bg-img-wrap" id="parallaxBg">
+        <img src="bank-img/DAC04182.jpg" alt="">
+    </div>
+    <div class="screen-inner fade-in">
+        <div class="section-tag">CENTER OVERVIEW</div>
+        <p class="intro-title">鹭岛之央 · 尊荣启幕</p>
+        <p class="intro-text">
+            华夏银行厦门分行私人银行中心，成立于<em>厦门金融核心区位</em>，秉承总行"承信立行、融智兴业"之理念，依托集团全国 44 家一级分行、超千个营业网点的雄厚服务网络，我们致力于为闽南地区<em>高净值客户及其家族</em>提供涵盖财富管理、资产配置、家族信托、高端医疗、子女教育与品质生活等全方位、一站式的综合金融服务。
+        </p>
+        <div class="stat-row">
+            <div class="stat-item">
+                <div class="stat-num" data-target="99.9">0<small>%</small></div>
+                <div class="stat-text">客户满意度</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num" data-target="20">0<small>+</small></div>
+                <div class="stat-text">年服务经验</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-num" data-target="100">0<small>亿</small></div>
+                <div class="stat-text">管理资产规模</div>
+            </div>
+        </div>
+        <div class="highlight-box">
+            <div class="hl-title">「 1 + 1 + N 」专属服务模式</div>
+            <p>1 位私人银行顾问 · 全程贴身管家式服务</p>
+            <p>1 位资深投资专家 · 深度财富诊断与策略</p>
+            <p>N 位领域精英 · 税务师、律师、信托架构师协同护航</p>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 屏3: 尊享服务 -->
+<!-- ============================================ -->
+<section class="screen services" id="s3">
+    <div class="corner-deco tl"></div>
+    <div class="corner-deco br"></div>
+    <div class="screen-inner fade-in">
+        <div class="section-tag">EXCLUSIVE SERVICES</div>
+        <h2 class="section-h2">尊享服务矩阵</h2>
+        <p class="desc">整合华夏银行集团内外顶级资源，深耕财富管理全链条</p>
+        <p class="desc-sub">为您与家族构建定制化的金融与生活服务生态</p>
+        <div class="service-cards">
+            <div class="service-card slide-left" style="transition-delay:0.05s">
+                <div class="svc-icon i1">📋</div>
+                <div class="svc-info">
+                    <h4>财富规划</h4>
+                    <p>资深规划师一对一深度访谈，量身定制涵盖短期流动性、中期增值与长期传承的全周期资产配置方案。</p>
+                    <span class="svc-highlight">★ 科学配置 · 稳健增值</span>
+                </div>
+            </div>
+            <div class="service-card slide-right" style="transition-delay:0.15s">
+                <div class="svc-icon i2">🏛</div>
+                <div class="svc-info">
+                    <h4>家族信托</h4>
+                    <p>家族财富传承顶层架构设计，涵盖资产隔离保护、税务筹划优化与代际交接安排，协同顶尖律所与税务机构确保世代永续。</p>
+                    <span class="svc-highlight">★ 顶层设计 · 永续传承</span>
+                </div>
+            </div>
+            <div class="service-card slide-left" style="transition-delay:0.25s">
+                <div class="svc-icon i3">🌍</div>
+                <div class="svc-info">
+                    <h4>全球资产配置</h4>
+                    <p>跨境投资方案、境外保险、海外置业与身份规划服务，助您在全球视野下实现多元化资产布局与系统性风险对冲。</p>
+                    <span class="svc-highlight">★ 全球视野 · 多元布局</span>
+                </div>
+            </div>
+            <div class="service-card slide-right" style="transition-delay:0.35s">
+                <div class="svc-icon i4">🎯</div>
+                <div class="svc-info">
+                    <h4>尊享生活权益</h4>
+                    <p>高端医疗绿色通道、全球名校教育规划、品质出行贵宾礼遇，覆盖您与家人生活全场景的专属特权服务体系。</p>
+                    <span class="svc-highlight">★ 全场景覆盖 · 品质无忧</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 屏4: 环境展示① -->
+<!-- ============================================ -->
+<section class="screen env-screen" id="s4">
+    <canvas class="particles-canvas" id="particles4"></canvas>
+    <div class="texture-bg"></div>
+    <div class="corner-deco tl"></div>
+    <div class="corner-deco br"></div>
+    <div class="screen-inner fade-in">
+        <div class="section-tag">ENVIRONMENT</div>
+        <h2 class="section-h2">私密 · 尊贵 · 舒适</h2>
+        <p class="env-desc">
+            传承<em>闽南人文底蕴</em>，融汇<em>现代金融美学</em>。中心由知名设计团队操刀，以"隐奢"为设计哲学，甄选天然石材、实木与艺术藏品，于繁华都市腹地中为贵宾营造一方静谧、高雅且极具私密性的专属空间。每一处细节，皆为不凡体验而考量。
+        </p>
+        <div class="env-photos">
+            <div class="env-photo-card zoom-in" style="transition-delay:0.1s">
+                <img src="bank-img/DAC03881.jpg" alt="">
+                <div class="photo-label">贵宾理财室</div>
+            </div>
+            <div class="env-photo-card zoom-in" style="transition-delay:0.25s">
+                <img src="bank-img/DAC03887.jpg" alt="">
+                <div class="photo-label">VIP 专属接待区</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 屏5: 环境展示② -->
+<!-- ============================================ -->
+<section class="screen env-screen-alt" id="s5">
+    <div class="corner-deco tl"></div>
+    <div class="corner-deco br"></div>
+    <div class="screen-inner fade-in">
+        <div class="section-tag">SPACES</div>
+        <h2 class="section-h2">雅致空间 · 宾至如归</h2>
+        <p class="env-desc">
+            于喧嚣之外，觅一方清雅之境。我们深知<em>信任的建立</em>需要恰当的氛围——品茗论道间推心置腹，茶香氤氲中洞见未来。每一位贵宾到访，皆享<em>全程一对一专属接待</em>，从泊车迎宾到送别话别，恪守国际私人银行服务标准礼仪。
+        </p>
+        <div class="env-photos">
+            <div class="env-photo-card float-up" style="transition-delay:0.1s">
+                <img src="bank-img/DAC03922.jpg" alt="">
+                <div class="photo-label">品茗会客区</div>
+            </div>
+            <div class="env-photo-card float-up" style="transition-delay:0.2s">
+                <img src="bank-img/DAC04073-HDR.jpg" alt="">
+                <div class="photo-label">私行专属洽谈室</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 屏6: 团队与理念 -->
+<!-- ============================================ -->
+<section class="screen team-screen" id="s6">
+    <canvas class="particles-canvas" id="particles6"></canvas>
+    <div class="texture-bg"></div>
+    <div class="corner-deco tl"></div>
+    <div class="corner-deco br"></div>
+    <div class="screen-inner fade-in">
+        <div class="section-tag">PROFESSIONAL TEAM</div>
+        <h2 class="section-h2">值得信赖的财富管家</h2>
+        <p class="desc">
+            汇聚资深投资顾问、特许金融分析师（CFA）、认证私人银行家（CPB）、注册税务师及法律顾问，以<em>多对一精英协作模式</em>为每一位贵宾提供专业、审慎、贴心、恒久的全方位财富管理服务。我们以诚信为根基，以专业为铠甲，以至善为追求。
+        </p>
+        <div class="team-photos">
+            <div class="team-photo-card slide-from-left" style="transition-delay:0.1s">
+                <img src="bank-img/DAC04117.jpg" alt="">
+            </div>
+            <div class="team-photo-card slide-from-right" style="transition-delay:0.2s">
+                <img src="bank-img/DAC04149.jpg" alt="">
+            </div>
+        </div>
+        <div class="philosophy-box">
+            <div class="quote-mark">&ldquo;</div>
+            <div class="quote-text" id="quoteText">以至诚之心，守护每一份托付<br>以专业之力，成就每一份期待</div>
+            <div class="quote-author">—— 华夏银行厦门分行私行中心</div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================ -->
+<!-- 屏7: 联系我们 -->
+<!-- ============================================ -->
+<section class="screen contact-screen" id="s7">
+    <div class="corner-deco tl"></div>
+    <div class="corner-deco br"></div>
+    <div class="screen-inner fade-in">
+        <div class="contact-icon">✉</div>
+        <h2 class="section-h2">诚邀莅临</h2>
+        <p class="contact-desc">预约专属顾问，开启您的财富管理新旅程。我们以最专业之服务与最诚挚之态度，恭候您的到来。</p>
+        <div class="contact-cards">
+            <div class="contact-card bounce-in" style="transition-delay:0.1s">
+                <div class="icon-dot">📍</div>
+                <div>
+                    <div class="cc-label">中心地址</div>
+                    <div class="cc-value">[地址占位 —— 请替换为实际地址]</div>
+                </div>
+            </div>
+            <div class="contact-card bounce-in" style="transition-delay:0.2s">
+                <div class="icon-dot">📞</div>
+                <div>
+                    <div class="cc-label">预约专线</div>
+                    <div class="cc-value">[电话占位 —— 请替换为实际电话]</div>
+                </div>
+            </div>
+        </div>
+        <div class="contact-footer">
+            <p class="commitment">我们郑重承诺：严守客户隐私，恪守受托人责任<br>以恒久之心，伴您穿越周期，共赴卓越</p>
+            <div class="divider" id="contactDivider"></div>
+            <p class="copyright">HUAXIA BANK XIAMEN · PRIVATE BANKING CENTER</p>
+        </div>
+    </div>
+</section>
+
+<script>
+(function() {
+    var body = document.body;
+    var docEl = document.documentElement;
+    var parallaxBg = document.getElementById('parallaxBg');
+
+    /* ===== 视差效果 ===== */
+    if (parallaxBg) {
+        var ticking = false;
+        window.addEventListener('scroll', function() {
+            if (!ticking) {
+                requestAnimationFrame(function() {
+                    var offset = parallaxBg.parentElement.offsetTop || 0;
+                    var scrolled = (window.pageYOffset || docEl.scrollTop) - offset;
+                    parallaxBg.style.transform = 'translateY(' + (scrolled * 0.08) + 'px)';
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        }, { passive: true });
+    }
+
+    /* ===== 粒子系统工厂 ===== */
+    function initParticles(canvasId, count, opacity) {
+        var canvas = document.getElementById(canvasId);
+        if (!canvas) return null;
+        var ctx = canvas.getContext('2d');
+        var particles = [];
+        var W, H, rafId = null;
+        var active = false;
+
+        function resize() {
+            var p = canvas.parentElement;
+            W = p.clientWidth;
+            H = p.clientHeight;
+            canvas.width = W;
+            canvas.height = H;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        for (var i = 0; i < count; i++) {
+            particles.push({
+                x: Math.random() * W,
+                y: Math.random() * H,
+                r: Math.random() * 1.2 + 0.3,
+                vx: (Math.random() - 0.5) * 0.25,
+                vy: -(Math.random() * 0.35 + 0.1),
+                alpha: Math.random() * opacity + 0.03,
+                decay: Math.random() * 0.003 + 0.0008
+            });
+        }
+
+        function draw() {
+            if (!active) return;
+            ctx.clearRect(0, 0, W, H);
+            for (var i = 0; i < particles.length; i++) {
+                var p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.alpha -= p.decay;
+                if (p.alpha <= 0 || p.y < -10 || p.y > H + 10) {
+                    p.x = Math.random() * W;
+                    p.y = H + 10;
+                    p.alpha = Math.random() * opacity + 0.03;
+                }
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(212,175,55,' + p.alpha.toFixed(3) + ')';
+                ctx.fill();
+            }
+            rafId = requestAnimationFrame(draw);
+        }
+
+        var observer = new IntersectionObserver(function(entries) {
+            if (entries[0].isIntersecting && !active) {
+                active = true;
+                rafId = requestAnimationFrame(draw);
+            } else if (!entries[0].isIntersecting && active) {
+                active = false;
+                if (rafId) cancelAnimationFrame(rafId);
+                ctx.clearRect(0, 0, W, H);
+            }
+        }, { threshold: 0.1 });
+        observer.observe(canvas.parentElement);
+
+        return { start: function() { active = true; rafId = requestAnimationFrame(draw); } };
+    }
+
+    initParticles('particles1', 50, 0.5);
+    initParticles('particles4', 13, 0.18);
+    initParticles('particles6', 13, 0.18);
+
+    /* ===== 通用入场 Observer (fade-in) ===== */
+    var fadeObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.fade-in').forEach(function(el) { fadeObserver.observe(el); });
+
+    /* ===== 屏3: slide-left / slide-right ===== */
+    var slideObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
+    document.querySelectorAll('.slide-left, .slide-right').forEach(function(el) { slideObserver.observe(el); });
+
+    /* ===== 屏4: zoom-in ===== */
+    var zoomObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.zoom-in').forEach(function(el) { zoomObserver.observe(el); });
+
+    /* ===== 屏5: float-up → spring-visible ===== */
+    var floatObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                setTimeout(function() { entry.target.classList.add('spring-visible'); }, 700);
+            }
+        });
+    }, { threshold: 0.15, rootMargin: '0px 0px -30px 0px' });
+    document.querySelectorAll('.float-up').forEach(function(el) { floatObserver.observe(el); });
+
+    /* ===== 屏6: slide-from-left / slide-from-right ===== */
+    var slideLRObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.slide-from-left, .slide-from-right').forEach(function(el) { slideLRObserver.observe(el); });
+
+    /* ===== 屏7: bounce-in + divider extend ===== */
+    var bounceObserver = new IntersectionObserver(function(entries) {
+        var anyVisible = false;
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                anyVisible = true;
+            }
+        });
+        if (anyVisible) {
+            setTimeout(function() {
+                var d = document.getElementById('contactDivider');
+                if (d) d.classList.add('extended');
+            }, 800);
+        }
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.bounce-in').forEach(function(el) { bounceObserver.observe(el); });
+
+    /* ===== 数字滚动 ===== */
+    var statObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                var el = entry.target;
+                var target = parseFloat(el.getAttribute('data-target'));
+                var suffix = (el.querySelector('small') || {}).textContent || '';
+                var duration = 1800;
+                var start = performance.now();
+                function tick(now) {
+                    var progress = Math.min((now - start) / duration, 1);
+                    var eased = 1 - Math.pow(1 - progress, 3);
+                    var current = (target * eased).toFixed(1);
+                    if (current.indexOf('.0') > -1) current = current.replace('.0', '');
+                    el.innerHTML = current + '<small>' + suffix + '</small>';
+                    if (progress < 1) requestAnimationFrame(tick);
+                }
+                requestAnimationFrame(tick);
+                statObserver.unobserve(el);
+            }
+        });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('.stat-num[data-target]').forEach(function(el) { statObserver.observe(el); });
+
+    /* ===== 标题金线下划线入场 ===== */
+    var lineObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) entry.target.classList.add('line-visible');
+        });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('.section-h2').forEach(function(el) { lineObserver.observe(el); });
+
+    /* ===== 理念文字逐字浮现 ===== */
+    var quoteText = document.getElementById('quoteText');
+    if (quoteText) {
+        var text = quoteText.textContent.replace(/\n\s*/g, '\n');
+        quoteText.textContent = '';
+        var chars = text.split('');
+        chars.forEach(function(c) {
+            var span = document.createElement('span');
+            span.className = 'reveal-char';
+            span.textContent = c;
+            if (c === '\n') span.style.display = 'block';
+            quoteText.appendChild(span);
+        });
+        var charEls = quoteText.querySelectorAll('.reveal-char');
+        var revealed = false;
+        var quoteObserver = new IntersectionObserver(function(entries) {
+            if (entries[0].isIntersecting && !revealed) {
+                revealed = true;
+                charEls.forEach(function(el, i) {
+                    setTimeout(function() { el.classList.add('revealed'); }, i * 28);
+                });
+            }
+        }, { threshold: 0.6 });
+        quoteObserver.observe(quoteText);
+    }
+})();
+</script>
+
+</body>
+</html>
