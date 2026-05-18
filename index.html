@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta property="og:title" content="华夏银行厦门分行私行中心">
 <meta property="og:description" content="尊享财富 · 传承致远 | 鹭岛之央，一站式综合金融服务">
-<meta property="og:image" content="https://regulus0808.github.io/bank-h5/bank-img/thumb.png">
+<meta property="og:image" content="https://regulus0808.github.io/bank-h5/bank-img/thumb.jpg?v=4">
 <meta property="og:url" content="https://regulus0808.github.io/bank-h5/">
 <meta property="og:type" content="website">
 <meta itemprop="name" content="华夏银行厦门分行私行中心">
 <meta itemprop="description" content="尊享财富 · 传承致远 | 鹭岛之央，一站式综合金融服务">
-<meta itemprop="image" content="https://regulus0808.github.io/bank-h5/bank-img/thumb.png">
+<meta itemprop="image" content="https://regulus0808.github.io/bank-h5/bank-img/thumb.jpg?v=4">
 <title>华夏银行厦门分行私行中心</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -338,7 +338,11 @@ body {
     color: var(--gold);
     font-family: "Georgia", "Times New Roman", serif;
     letter-spacing: 0.02em;
+    contain: layout style;
+    min-width: 88px;
+    white-space: nowrap;
 }
+.overview .stat-num .stat-val { display: inline; }
 .overview .stat-num small { font-size: 1.3rem; font-weight: 300; }
 .overview .stat-text {
     font-size: 0.76rem;
@@ -348,11 +352,11 @@ body {
 }
 .overview .highlight-box {
     padding: 22px 28px;
-    border: 1px solid rgba(212,175,55,0.12);
-    border-radius: 8px;
+    border: 1px solid rgba(212,175,55,0.15);
+    border-radius: 10px;
     max-width: 420px;
     margin: 0 auto;
-    background: rgba(212,175,55,0.02);
+    background: rgba(10,10,10,0.35);
 }
 .overview .highlight-box .hl-title {
     font-size: 0.72rem;
@@ -400,13 +404,15 @@ body {
     display: flex;
     align-items: flex-start;
     gap: 15px;
-    background: var(--white);
-    border-radius: 10px;
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 12px;
     padding: 20px 18px;
     box-shadow: 0 1px 8px rgba(0,0,0,0.03);
     position: relative;
     overflow: hidden;
-    border: 1px solid #eee;
+    border: 1px solid rgba(212,175,55,0.08);
 }
 
 .service-card .svc-icon {
@@ -598,10 +604,10 @@ body {
 .philosophy-box {
     margin-top: 28px;
     padding: 28px 24px;
-    border: 1px solid rgba(212,175,55,0.1);
+    border: 1px solid rgba(212,175,55,0.12);
     border-radius: 10px;
     text-align: center;
-    background: rgba(212,175,55,0.02);
+    background: rgba(0,0,0,0.2);
 }
 .philosophy-box .quote-mark {
     font-family: "Georgia", "Times New Roman", serif;
@@ -664,11 +670,13 @@ body {
     display: flex;
     align-items: center;
     gap: 15px;
-    background: var(--white);
-    border-radius: 10px;
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 12px;
     padding: 18px 20px;
     box-shadow: 0 1px 8px rgba(0,0,0,0.03);
-    border: 1px solid #eee;
+    border: 1px solid rgba(212,175,55,0.08);
 }
 .contact-card .icon-dot {
     flex-shrink: 0;
@@ -915,6 +923,201 @@ body {
 }
 .bgm-btn.muted .wave-bars span { background: rgba(255,255,255,0.3); }
 
+/* ============ 增强鎏金特效 ============ */
+
+/* --- 星光闪烁 (全局暗屏) --- */
+.star-sparkle {
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: var(--gold-bright);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+    box-shadow: 0 0 8px 3px rgba(232,204,110,0.7), 0 0 2px 1px rgba(255,255,255,0.8);
+}
+.star-sparkle.pop {
+    animation: starPop 0.35s ease-out forwards;
+}
+@keyframes starPop {
+    0% { opacity: 1; transform: scale(0); }
+    60% { opacity: 1; transform: scale(2.5); }
+    100% { opacity: 0; transform: scale(3); }
+}
+
+/* --- 封面星光爆发环 --- */
+.cover .screen-inner::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 4px;
+    height: 4px;
+    background: var(--gold-bright);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    animation: burstRing 3.5s ease-out infinite;
+}
+@keyframes burstRing {
+    0% { box-shadow: 0 0 0 0 rgba(232,204,110,1); opacity: 1; width: 4px; height: 4px; }
+    100% { box-shadow: 0 0 60px 30px rgba(232,204,110,0); opacity: 0; width: 350px; height: 350px; }
+}
+
+/* --- 封面光柱加宽 --- */
+.light-beam { height: 5px; }
+
+/* --- 数字光环脉冲 --- */
+.stat-num {
+    position: relative !important;
+}
+.stat-num::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 1px solid rgba(212,175,55,0.25);
+    transform: translate(-50%, -50%) scale(1);
+    animation: haloPulse 2.2s ease-in-out infinite;
+    pointer-events: none;
+}
+@keyframes haloPulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.4; }
+    50% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
+}
+
+/* --- 卡片呼吸光 --- */
+.service-card.breathing .svc-icon {
+    animation: iconBreathe 2.6s ease-in-out infinite;
+}
+@keyframes iconBreathe {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(212,175,55,0); }
+    50% { box-shadow: 0 0 16px 6px rgba(212,175,55,0.2); }
+}
+
+/* --- 卡片高光扫过 --- */
+.service-card .highlight-bar {
+    position: absolute;
+    top: -80%;
+    left: -60%;
+    width: 50%;
+    height: 260%;
+    background: linear-gradient(105deg, transparent 35%, rgba(232,204,110,0.03) 45%, rgba(232,204,110,0.18) 50%, rgba(232,204,110,0.03) 55%, transparent 65%);
+    pointer-events: none;
+    transform: rotate(28deg);
+    animation: hBarSweep 5s ease-in-out infinite;
+    z-index: 1;
+}
+@keyframes hBarSweep {
+    0%, 100% { left: -60%; opacity: 0; }
+    10% { opacity: 1; }
+    45% { opacity: 1; }
+    55% { opacity: 1; }
+    90% { opacity: 0; left: 160%; }
+}
+
+/* --- 屏4 星光爆发粒子 --- */
+.env-photo-card .star-burst {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: var(--gold-bright);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 3;
+    box-shadow: 0 0 10px 4px rgba(232,204,110,0.8);
+}
+
+/* --- 屏5 金反光残留 --- */
+.env-photo-card .gold-afterglow {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(105deg, transparent 40%, rgba(232,204,110,0.06) 50%, transparent 60%);
+    opacity: 0;
+}
+.env-photo-card .gold-afterglow.show {
+    animation: afterglowFade 2s ease-out forwards;
+}
+@keyframes afterglowFade {
+    0% { opacity: 0.8; }
+    100% { opacity: 0; }
+}
+
+/* --- 屏6 理念框环绕金点 --- */
+.philosophy-box { overflow: visible !important; }
+.philosophy-box .orbit-dot {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: var(--gold);
+    border-radius: 50%;
+    box-shadow: 0 0 8px var(--gold), 0 0 16px rgba(232,204,110,0.5);
+    pointer-events: none;
+    z-index: 0;
+    animation: orbitMove 5s linear infinite;
+}
+@keyframes orbitMove {
+    0% { top: -3px; left: 15%; }
+    25% { top: -3px; left: 85%; }
+    50% { top: calc(100% - 3px); left: 85%; }
+    75% { top: calc(100% - 3px); left: 15%; }
+    100% { top: -3px; left: 15%; }
+}
+
+/* --- 屏7 旋转光环 --- */
+.contact-screen .contact-icon::before {
+    content: '';
+    position: absolute;
+    inset: -7px;
+    border-radius: 50%;
+    border: 1.5px solid transparent;
+    border-top-color: var(--gold);
+    border-right-color: rgba(212,175,55,0.4);
+    animation: ringSpin 3.5s linear infinite;
+}
+@keyframes ringSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* --- 屏7 三涟效果 --- */
+.contact-card .gold-ripple:nth-child(2) {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,175,55,0.35) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+.contact-card .gold-ripple:nth-child(3) {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,175,55,0.25) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+.contact-card .gold-ripple:nth-child(1).go { animation-delay: 0s; }
+.contact-card .gold-ripple:nth-child(2).go { animation-delay: 0.25s; }
+.contact-card .gold-ripple:nth-child(3).go { animation-delay: 0.5s; }
+
+/* ============ 毛玻璃效果 ============ */
+.glass {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+.glass-light {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+.glass-dark {
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+}
+
 /* ============ 响应式 ============ */
 @media (min-width: 480px) {
     .service-cards { flex-direction: row; flex-wrap: wrap; }
@@ -988,19 +1191,19 @@ body {
         </p>
         <div class="stat-row">
             <div class="stat-item">
-                <div class="stat-num" data-target="99.9">0<small>%</small></div>
+                <div class="stat-num" data-target="99.9"><span class="stat-val">0</span><small>%</small></div>
                 <div class="stat-text">客户满意度</div>
             </div>
             <div class="stat-item">
-                <div class="stat-num" data-target="20">0<small>+</small></div>
+                <div class="stat-num" data-target="20"><span class="stat-val">0</span><small>+</small></div>
                 <div class="stat-text">年服务经验</div>
             </div>
             <div class="stat-item">
-                <div class="stat-num" data-target="100">0<small>亿</small></div>
+                <div class="stat-num" data-target="100"><span class="stat-val">0</span><small>亿</small></div>
                 <div class="stat-text">管理资产规模</div>
             </div>
         </div>
-        <div class="highlight-box">
+        <div class="highlight-box glass">
             <div class="hl-title">「 1 + 1 + N 」专属服务模式</div>
             <p>1 位私人银行顾问 · 全程贴身管家式服务</p>
             <p>1 位资深投资专家 · 深度财富诊断与策略</p>
@@ -1022,6 +1225,7 @@ body {
         <p class="desc-sub">为您与家族构建定制化的金融与生活服务生态</p>
         <div class="service-cards">
             <div class="service-card slide-left" style="transition-delay:0.05s">
+                <div class="highlight-bar"></div>
                 <div class="svc-icon i1">📋</div>
                 <div class="svc-info">
                     <h4>财富规划</h4>
@@ -1030,6 +1234,7 @@ body {
                 </div>
             </div>
             <div class="service-card slide-right" style="transition-delay:0.15s">
+                <div class="highlight-bar"></div>
                 <div class="svc-icon i2">🏛</div>
                 <div class="svc-info">
                     <h4>家族信托</h4>
@@ -1038,6 +1243,7 @@ body {
                 </div>
             </div>
             <div class="service-card slide-left" style="transition-delay:0.25s">
+                <div class="highlight-bar"></div>
                 <div class="svc-icon i3">🌍</div>
                 <div class="svc-info">
                     <h4>全球资产配置</h4>
@@ -1046,6 +1252,7 @@ body {
                 </div>
             </div>
             <div class="service-card slide-right" style="transition-delay:0.35s">
+                <div class="highlight-bar"></div>
                 <div class="svc-icon i4">🎯</div>
                 <div class="svc-info">
                     <h4>尊享生活权益</h4>
@@ -1102,11 +1309,13 @@ body {
             <div class="env-photo-card float-up" style="transition-delay:0.1s">
                 <img src="bank-img/DAC03922.jpg" alt="">
                 <div class="gold-sweep"></div>
+                <div class="gold-afterglow"></div>
                 <div class="photo-label">品茗会客区</div>
             </div>
             <div class="env-photo-card float-up" style="transition-delay:0.2s">
                 <img src="bank-img/DAC04073-HDR.jpg" alt="">
                 <div class="gold-sweep"></div>
+                <div class="gold-afterglow"></div>
                 <div class="photo-label">私行专属洽谈室</div>
             </div>
         </div>
@@ -1135,7 +1344,8 @@ body {
                 <img src="bank-img/DAC04149.jpg" alt="">
             </div>
         </div>
-        <div class="philosophy-box">
+        <div class="philosophy-box glass-dark">
+            <div class="orbit-dot"></div>
             <div class="quote-mark">&ldquo;</div>
             <div class="quote-text" id="quoteText">以至诚之心，守护每一份托付<br>以专业之力，成就每一份期待</div>
             <div class="quote-author">—— 华夏银行厦门分行私行中心</div>
@@ -1155,6 +1365,8 @@ body {
         <p class="contact-desc">预约专属顾问，开启您的财富管理新旅程。我们以最专业之服务与最诚挚之态度，恭候您的到来。</p>
         <div class="contact-cards">
             <div class="contact-card bounce-in" style="transition-delay:0.1s">
+                <div class="gold-ripple"></div>
+                <div class="gold-ripple"></div>
                 <div class="gold-ripple"></div>
                 <div class="icon-dot">📍</div>
                 <div>
@@ -1324,8 +1536,8 @@ body {
         entries.forEach(function(entry) {
             if (entry.isIntersecting) {
                 var el = entry.target;
+                var valEl = el.querySelector('.stat-val');
                 var target = parseFloat(el.getAttribute('data-target'));
-                var suffix = (el.querySelector('small') || {}).textContent || '';
                 var duration = 1800;
                 var start = performance.now();
                 function tick(now) {
@@ -1333,7 +1545,7 @@ body {
                     var eased = 1 - Math.pow(1 - progress, 3);
                     var current = (target * eased).toFixed(1);
                     if (current.indexOf('.0') > -1) current = current.replace('.0', '');
-                    el.innerHTML = current + '<small>' + suffix + '</small>';
+                    if (valEl) valEl.textContent = current;
                     if (progress < 1) requestAnimationFrame(tick);
                 }
                 requestAnimationFrame(tick);
@@ -1520,6 +1732,102 @@ body {
             }
         }, 150);
     }
+    /* ===== 全局星光闪烁 (暗屏) ===== */
+    var darkScreens = document.querySelectorAll('.cover, .overview, .env-screen, .team-screen');
+    darkScreens.forEach(function(screen) {
+        function spark() {
+            if (!screen.parentElement) return;
+            var rect = screen.getBoundingClientRect();
+            if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+            var dot = document.createElement('div');
+            dot.className = 'star-sparkle';
+            dot.style.left = (Math.random() * 90 + 5) + '%';
+            dot.style.top = (Math.random() * 90 + 5) + '%';
+            screen.appendChild(dot);
+            requestAnimationFrame(function() { dot.classList.add('pop'); });
+            setTimeout(function() { if (dot.parentElement) dot.parentElement.removeChild(dot); }, 400);
+        }
+        setInterval(spark, 1200 + Math.random() * 2000);
+        spark();
+    });
+
+    /* ===== 屏3: 卡片呼吸光 ===== */
+    var breatheObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('breathing');
+            } else {
+                entry.target.classList.remove('breathing');
+            }
+        });
+    }, { threshold: 0.3 });
+    document.querySelectorAll('.service-card').forEach(function(el) { breatheObserver.observe(el); });
+
+    /* ===== 屏4: 星光爆发粒子 ===== */
+    document.querySelectorAll('#s4 .env-photo-card').forEach(function(card) {
+        var zoomObs = new IntersectionObserver(function(entries) {
+            if (entries[0].isIntersecting) {
+                var rect = card.getBoundingClientRect();
+                var cx = rect.left + rect.width / 2;
+                var cy = rect.top + rect.height / 2;
+                for (var i = 0; i < 16; i++) {
+                    var bstar = document.createElement('div');
+                    bstar.className = 'star-burst';
+                    var angle = (Math.PI * 2 / 16) * i + Math.random() * 0.3;
+                    var dist = 30 + Math.random() * 80;
+                    bstar.style.position = 'fixed';
+                    bstar.style.left = cx + 'px';
+                    bstar.style.top = cy + 'px';
+                    bstar.style.zIndex = '999';
+                    bstar.style.transition = 'all 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+                    bstar.style.opacity = '0';
+                    document.body.appendChild(bstar);
+                    requestAnimationFrame(function() {
+                        bstar.style.left = (cx + Math.cos(angle) * dist) + 'px';
+                        bstar.style.top = (cy + Math.sin(angle) * dist) + 'px';
+                        bstar.style.opacity = '1';
+                        bstar.style.transform = 'scale(1.5)';
+                    });
+                    (function(el) {
+                        setTimeout(function() {
+                            el.style.opacity = '0';
+                            el.style.transform = 'scale(0)';
+                            setTimeout(function() { if (el.parentElement) el.parentElement.removeChild(el); }, 700);
+                        }, 500);
+                    })(bstar);
+                }
+                zoomObs.unobserve(card);
+            }
+        }, { threshold: 0.4 });
+        zoomObs.observe(card);
+    });
+
+    /* ===== 屏5: 金反光残留 ===== */
+    document.querySelectorAll('.env-photo-card .gold-afterglow').forEach(function(glow) {
+        var glowObs = new IntersectionObserver(function(entries) {
+            if (entries[0].isIntersecting) {
+                setTimeout(function() { glow.classList.add('show'); }, 400);
+                setTimeout(function() { glow.classList.remove('show'); }, 2400);
+                glowObs.unobserve(entries[0].target);
+            }
+        }, { threshold: 0.5 });
+        glowObs.observe(glow);
+    });
+
+    /* ===== 屏7: 三涟涟漪触发 ===== */
+    var tripRippleObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                var ripples = entry.target.querySelectorAll('.gold-ripple');
+                ripples.forEach(function(r) {
+                    r.classList.add('go');
+                    setTimeout(function() { r.classList.remove('go'); }, 1500);
+                });
+                tripRippleObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.4 });
+    document.querySelectorAll('.contact-card').forEach(function(el) { tripRippleObserver.observe(el); });
 })();
 </script>
 
