@@ -5,10 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta property="og:title" content="华夏银行厦门分行私行中心">
 <meta property="og:description" content="尊享财富 · 传承致远 | 鹭岛之央，一站式综合金融服务">
+<meta property="og:image" content="https://regulus0808.github.io/bank-h5/bank-img/thumb.jpg">
 <meta property="og:url" content="https://regulus0808.github.io/bank-h5/">
 <meta property="og:type" content="website">
 <meta itemprop="name" content="华夏银行厦门分行私行中心">
 <meta itemprop="description" content="尊享财富 · 传承致远 | 鹭岛之央，一站式综合金融服务">
+<meta itemprop="image" content="https://regulus0808.github.io/bank-h5/bank-img/thumb.jpg">
 <title>华夏银行厦门分行私行中心</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -770,6 +772,149 @@ body {
     to { transform: translateY(0); }
 }
 
+/* ============ 鎏金特效 ============ */
+/* --- 光柱扫描 --- */
+.light-beam {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    width: 120%;
+    height: 3px;
+    left: -10%;
+    background: linear-gradient(90deg, transparent, rgba(232,204,110,0.6), rgba(255,255,255,0.9), rgba(232,204,110,0.6), transparent);
+    filter: blur(1px);
+    opacity: 0;
+}
+.light-beam.b1 { top: 42%; transform: rotate(-15deg); animation: beamSweep 4s ease-in-out infinite 0.5s; }
+.light-beam.b2 { top: 58%; transform: rotate(12deg); animation: beamSweep 4s ease-in-out infinite 2.5s; width: 130%; }
+
+@keyframes beamSweep {
+    0%, 100% { opacity: 0; transform: translateX(-30%); }
+    15% { opacity: 0; transform: translateX(-30%); }
+    25% { opacity: 0.7; transform: translateX(0); }
+    35% { opacity: 0; transform: translateX(30%); }
+}
+
+/* --- 金边描画 --- */
+@keyframes goldBorderDraw {
+    0% { box-shadow: 0 0 0 0 rgba(212,175,55,0); border-color: transparent; }
+    40% { box-shadow: 0 0 18px 3px rgba(212,175,55,0.35); border-color: rgba(212,175,55,0.6); }
+    70% { box-shadow: 0 0 10px 1px rgba(212,175,55,0.2); border-color: rgba(212,175,55,0.3); }
+    100% { box-shadow: 0 0 0 0 rgba(212,175,55,0); border-color: rgba(212,175,55,0.08); }
+}
+.service-card.gold-trace { animation: goldBorderDraw 1.5s ease-out forwards; }
+.contact-card.gold-trace { animation: goldBorderDraw 1.2s ease-out forwards; }
+
+/* --- 金晕扩散 --- */
+.env-photo-card .gold-halo {
+    position: absolute;
+    inset: -20px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,175,55,0.3) 0%, transparent 70%);
+    opacity: 0;
+    z-index: 2;
+    pointer-events: none;
+}
+.env-photo-card .gold-halo.burst {
+    animation: haloBurst 1.2s ease-out forwards;
+}
+@keyframes haloBurst {
+    0% { opacity: 0; transform: scale(0.3); }
+    40% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.5); }
+}
+
+/* --- 金光扫面 (屏5) --- */
+.env-photo-card .gold-sweep {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(105deg, transparent 30%, rgba(232,204,110,0.15) 50%, transparent 70%);
+    opacity: 0;
+    transform: translateX(-100%);
+}
+.env-photo-card .gold-sweep.active { animation: sweepline 1.5s ease-in-out forwards; }
+@keyframes sweepline {
+    0% { opacity: 0; transform: translateX(-100%); }
+    30% { opacity: 1; }
+    70% { opacity: 1; }
+    100% { opacity: 0; transform: translateX(120%); }
+}
+
+/* --- 金字微闪 (屏6) --- */
+.reveal-char.text-flash {
+    animation: textGoldFlash 0.6s ease-out;
+}
+@keyframes textGoldFlash {
+    0% { text-shadow: 0 0 8px rgba(232,204,110,0.8), 0 0 20px rgba(212,175,55,0.6); }
+    100% { text-shadow: 0 0 0px rgba(232,204,110,0), 0 0 0px rgba(212,175,55,0); }
+}
+
+/* --- 金涟扩散 (屏7) --- */
+.contact-card .gold-ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(212,175,55,0.4) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+}
+.contact-card .gold-ripple.go {
+    animation: rippleOut 0.9s ease-out forwards;
+}
+@keyframes rippleOut {
+    0% { width: 10px; height: 10px; opacity: 1; }
+    100% { width: 400px; height: 400px; opacity: 0; }
+}
+
+/* --- 金粉飘洒 --- */
+.gold-dust-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    pointer-events: none;
+}
+
+/* --- BGM 按钮 --- */
+.bgm-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(10,10,10,0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(212,175,55,0.25);
+    color: var(--gold);
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+}
+.bgm-btn:active { transform: scale(0.9); background: rgba(212,175,55,0.15); }
+.bgm-btn.muted { color: rgba(255,255,255,0.3); border-color: rgba(255,255,255,0.1); }
+.bgm-btn .wave-bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 14px;
+}
+.bgm-btn .wave-bars span {
+    width: 2px;
+    border-radius: 1px;
+    background: var(--gold);
+    transition: height 0.15s ease;
+}
+.bgm-btn.muted .wave-bars span { background: rgba(255,255,255,0.3); }
+
 /* ============ 响应式 ============ */
 @media (min-width: 480px) {
     .service-cards { flex-direction: row; flex-wrap: wrap; }
@@ -791,11 +936,17 @@ body {
 </style>
 </head>
 <body>
+<audio id="bgm" src="bank-img/bgm.mp3" loop preload="none" style="display:none"></audio>
+<button class="bgm-btn muted" id="bgmBtn" aria-label="音乐开关">
+    <div class="wave-bars"><span></span><span></span><span></span><span></span></div>
+</button>
 
 <!-- ============================================ -->
 <!-- 屏1: 封面 -->
 <!-- ============================================ -->
 <section class="screen cover" id="s1">
+    <div class="light-beam b1"></div>
+    <div class="light-beam b2"></div>
     <div class="cover-bg">
         <img src="bank-img/DAC04245.jpg" alt="">
     </div>
@@ -824,6 +975,7 @@ body {
 <!-- 屏2: 中心概览 -->
 <!-- ============================================ -->
 <section class="screen overview" id="s2">
+    <canvas class="particles-canvas" id="particles2"></canvas>
     <div class="texture-bg"></div>
     <div class="bg-img-wrap" id="parallaxBg">
         <img src="bank-img/DAC04182.jpg" alt="">
@@ -922,10 +1074,12 @@ body {
         <div class="env-photos">
             <div class="env-photo-card zoom-in" style="transition-delay:0.1s">
                 <img src="bank-img/DAC03881.jpg" alt="">
+                <div class="gold-halo"></div>
                 <div class="photo-label">贵宾理财室</div>
             </div>
             <div class="env-photo-card zoom-in" style="transition-delay:0.25s">
                 <img src="bank-img/DAC03887.jpg" alt="">
+                <div class="gold-halo"></div>
                 <div class="photo-label">VIP 专属接待区</div>
             </div>
         </div>
@@ -947,10 +1101,12 @@ body {
         <div class="env-photos">
             <div class="env-photo-card float-up" style="transition-delay:0.1s">
                 <img src="bank-img/DAC03922.jpg" alt="">
+                <div class="gold-sweep"></div>
                 <div class="photo-label">品茗会客区</div>
             </div>
             <div class="env-photo-card float-up" style="transition-delay:0.2s">
                 <img src="bank-img/DAC04073-HDR.jpg" alt="">
+                <div class="gold-sweep"></div>
                 <div class="photo-label">私行专属洽谈室</div>
             </div>
         </div>
@@ -999,13 +1155,15 @@ body {
         <p class="contact-desc">预约专属顾问，开启您的财富管理新旅程。我们以最专业之服务与最诚挚之态度，恭候您的到来。</p>
         <div class="contact-cards">
             <div class="contact-card bounce-in" style="transition-delay:0.1s">
+                <div class="gold-ripple"></div>
                 <div class="icon-dot">📍</div>
                 <div>
                     <div class="cc-label">中心地址</div>
                     <div class="cc-value">厦门思明区领事馆路16号华夏银行厦门分行21楼私人银行中心</div>
                 </div>
             </div>
-           
+
+        </div>
         <div class="contact-footer">
             <p class="commitment">我们郑重承诺：严守客户隐私，恪守受托人责任<br>以恒久之心，伴您穿越周期，共赴卓越</p>
             <div class="divider" id="contactDivider"></div>
@@ -1103,9 +1261,10 @@ body {
         return { start: function() { active = true; rafId = requestAnimationFrame(draw); } };
     }
 
-    initParticles('particles1', 50, 0.5);
-    initParticles('particles4', 13, 0.18);
-    initParticles('particles6', 13, 0.18);
+    initParticles('particles1', 55, 0.55);
+    initParticles('particles2', 10, 0.12);
+    initParticles('particles4', 16, 0.22);
+    initParticles('particles6', 16, 0.22);
 
     /* ===== 通用入场 Observer (fade-in) ===== */
     var fadeObserver = new IntersectionObserver(function(entries) {
@@ -1216,6 +1375,150 @@ body {
             }
         }, { threshold: 0.6 });
         quoteObserver.observe(quoteText);
+    }
+    /* ===== 屏3: 金边描画 ===== */
+    var traceObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('gold-trace');
+                setTimeout(function() { entry.target.classList.remove('gold-trace'); }, 1500);
+            }
+        });
+    }, { threshold: 0.3 });
+    document.querySelectorAll('.service-card').forEach(function(el) { traceObserver.observe(el); });
+
+    /* ===== 屏4: 金晕扩散 ===== */
+    var haloObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                var halo = entry.target.querySelector('.gold-halo');
+                if (halo) {
+                    halo.classList.add('burst');
+                    setTimeout(function() { halo.classList.remove('burst'); }, 1200);
+                }
+            }
+        });
+    }, { threshold: 0.4 });
+    document.querySelectorAll('.env-photo-card .gold-halo').forEach(function(el) {
+        haloObserver.observe(el.parentElement);
+    });
+
+    /* ===== 屏5: 金光扫面 ===== */
+    var sweepObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                var sweep = entry.target.querySelector('.gold-sweep');
+                if (sweep) {
+                    sweep.classList.add('active');
+                    setTimeout(function() { sweep.classList.remove('active'); }, 1500);
+                }
+            }
+        });
+    }, { threshold: 0.4 });
+    document.querySelectorAll('.env-photo-card .gold-sweep').forEach(function(el) {
+        sweepObserver.observe(el.parentElement);
+    });
+
+    /* ===== 屏6: 金字微闪 ===== */
+    var quoteFlashObserver = new IntersectionObserver(function(entries) {
+        if (entries[0].isIntersecting) {
+            var chars = quoteText.querySelectorAll('.reveal-char');
+            chars.forEach(function(el, i) {
+                setTimeout(function() {
+                    el.classList.add('text-flash');
+                    setTimeout(function() { el.classList.remove('text-flash'); }, 600);
+                }, i * 28 + 400);
+            });
+            quoteFlashObserver.unobserve(entries[0].target);
+        }
+    }, { threshold: 0.5 });
+    if (quoteText) quoteFlashObserver.observe(quoteText);
+
+    /* ===== 屏7: 金涟扩散 ===== */
+    var rippleObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            if (entry.isIntersecting) {
+                var ripple = entry.target.querySelector('.gold-ripple');
+                if (ripple) {
+                    ripple.classList.add('go');
+                    setTimeout(function() { ripple.classList.remove('go'); }, 900);
+                }
+            }
+        });
+    }, { threshold: 0.4 });
+    document.querySelectorAll('.contact-card .gold-ripple').forEach(function(el) {
+        rippleObserver.observe(el.parentElement);
+    });
+
+    /* ===== BGM 控制 ===== */
+    var bgm = document.getElementById('bgm');
+    var bgmBtn = document.getElementById('bgmBtn');
+    var bgmPlaying = false;
+
+    function updateBgmUI() {
+        if (bgmPlaying) {
+            bgmBtn.classList.remove('muted');
+        } else {
+            bgmBtn.classList.add('muted');
+        }
+    }
+
+    function toggleBgm() {
+        if (bgmPlaying) {
+            bgm.pause();
+            bgmPlaying = false;
+        } else {
+            var p = bgm.play();
+            if (p && p.then) {
+                p.then(function() { bgmPlaying = true; updateBgmUI(); })
+                 .catch(function() { bgmPlaying = false; updateBgmUI(); });
+            }
+            bgmPlaying = true;
+        }
+        updateBgmUI();
+    }
+
+    bgmBtn.addEventListener('click', toggleBgm);
+    bgmBtn.addEventListener('touchend', function(e) { e.preventDefault(); toggleBgm(); });
+
+    document.addEventListener('WeixinJSBridgeReady', function() {
+        if (!bgmPlaying) {
+            var p = bgm.play();
+            if (p && p.then) {
+                p.then(function() { bgmPlaying = true; updateBgmUI(); })
+                 .catch(function() {});
+            }
+            bgmPlaying = true;
+            updateBgmUI();
+        }
+    }, false);
+
+    var firstTouch = function() {
+        if (!bgmPlaying) {
+            var p = bgm.play();
+            if (p && p.then) {
+                p.then(function() { bgmPlaying = true; updateBgmUI(); })
+                 .catch(function() {});
+            }
+            bgmPlaying = true;
+            updateBgmUI();
+        }
+        document.removeEventListener('touchstart', firstTouch);
+    };
+    document.addEventListener('touchstart', firstTouch, { once: false });
+
+    /* ===== 音频可视化波动条 ===== */
+    if (bgmBtn.querySelector('.wave-bars')) {
+        var bars = bgmBtn.querySelectorAll('.wave-bars span');
+        setInterval(function() {
+            if (bgmPlaying) {
+                bars.forEach(function(bar) {
+                    bar.style.height = (Math.random() * 10 + 4) + 'px';
+                });
+            } else {
+                bars.forEach(function(bar) { bar.style.height = '2px'; });
+            }
+        }, 150);
     }
 })();
 </script>
