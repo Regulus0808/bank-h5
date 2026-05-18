@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta property="og:title" content="华夏银行厦门分行私行中心">
 <meta property="og:description" content="尊享财富 · 传承致远 | 鹭岛之央，一站式综合金融服务">
-<meta property="og:image" content="https://regulus0808.github.io/bank-h5/bank-img/thumb.jpg?v=4">
+<meta property="og:image" content="https://regulus0808.github.io/bank-h5/bank-img/thumb.jpg?v=share">
 <meta property="og:url" content="https://regulus0808.github.io/bank-h5/">
 <meta property="og:type" content="website">
 <meta itemprop="name" content="华夏银行厦门分行私行中心">
 <meta itemprop="description" content="尊享财富 · 传承致远 | 鹭岛之央，一站式综合金融服务">
-<meta itemprop="image" content="https://regulus0808.github.io/bank-h5/bank-img/thumb.jpg?v=4">
+<meta itemprop="image" content="https://regulus0808.github.io/bank-h5/bank-img/thumb.jpg?v=share">
 <title>华夏银行厦门分行私行中心</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -1118,6 +1118,16 @@ body {
     -webkit-backdrop-filter: blur(14px);
 }
 
+/* ============ 流线特效 Canvas ============ */
+.flow-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+}
+
 /* ============ 响应式 ============ */
 @media (min-width: 480px) {
     .service-cards { flex-direction: row; flex-wrap: wrap; }
@@ -1140,7 +1150,7 @@ body {
 </head>
 <body>
 <audio id="bgm" src="bank-img/bgm.mp3" loop preload="none" style="display:none"></audio>
-<button class="bgm-btn muted" id="bgmBtn" aria-label="音乐开关">
+<button class="bgm-btn" id="bgmBtn" aria-label="音乐开关">
     <div class="wave-bars"><span></span><span></span><span></span><span></span></div>
 </button>
 
@@ -1281,11 +1291,13 @@ body {
         <div class="env-photos">
             <div class="env-photo-card zoom-in" style="transition-delay:0.1s">
                 <img src="bank-img/DAC03881.jpg" alt="">
+                <canvas class="flow-canvas infinity-loop"></canvas>
                 <div class="gold-halo"></div>
                 <div class="photo-label">贵宾理财室</div>
             </div>
             <div class="env-photo-card zoom-in" style="transition-delay:0.25s">
                 <img src="bank-img/DAC03887.jpg" alt="">
+                <canvas class="flow-canvas infinity-loop"></canvas>
                 <div class="gold-halo"></div>
                 <div class="photo-label">VIP 专属接待区</div>
             </div>
@@ -1308,12 +1320,14 @@ body {
         <div class="env-photos">
             <div class="env-photo-card float-up" style="transition-delay:0.1s">
                 <img src="bank-img/DAC03922.jpg" alt="">
+                <canvas class="flow-canvas wave-sweep"></canvas>
                 <div class="gold-sweep"></div>
                 <div class="gold-afterglow"></div>
                 <div class="photo-label">品茗会客区</div>
             </div>
             <div class="env-photo-card float-up" style="transition-delay:0.2s">
                 <img src="bank-img/DAC04073-HDR.jpg" alt="">
+                <canvas class="flow-canvas wave-sweep"></canvas>
                 <div class="gold-sweep"></div>
                 <div class="gold-afterglow"></div>
                 <div class="photo-label">私行专属洽谈室</div>
@@ -1665,7 +1679,21 @@ body {
     /* ===== BGM 控制 ===== */
     var bgm = document.getElementById('bgm');
     var bgmBtn = document.getElementById('bgmBtn');
-    var bgmPlaying = false;
+    var bgmPlaying = true;
+    var bgmStarted = false;
+
+    function startBgm() {
+        if (bgmStarted) return;
+        bgmStarted = true;
+        var p = bgm.play();
+        if (p && p.then) {
+            p.then(function() { bgmPlaying = true; updateBgmUI(); })
+             .catch(function() { bgmPlaying = false; updateBgmUI(); });
+        } else {
+            bgmPlaying = true;
+            updateBgmUI();
+        }
+    }
 
     function updateBgmUI() {
         if (bgmPlaying) {
@@ -1693,31 +1721,15 @@ body {
     bgmBtn.addEventListener('click', toggleBgm);
     bgmBtn.addEventListener('touchend', function(e) { e.preventDefault(); toggleBgm(); });
 
+    startBgm();
+
     document.addEventListener('WeixinJSBridgeReady', function() {
-        if (!bgmPlaying) {
-            var p = bgm.play();
-            if (p && p.then) {
-                p.then(function() { bgmPlaying = true; updateBgmUI(); })
-                 .catch(function() {});
-            }
-            bgmPlaying = true;
-            updateBgmUI();
-        }
+        startBgm();
     }, false);
 
-    var firstTouch = function() {
-        if (!bgmPlaying) {
-            var p = bgm.play();
-            if (p && p.then) {
-                p.then(function() { bgmPlaying = true; updateBgmUI(); })
-                 .catch(function() {});
-            }
-            bgmPlaying = true;
-            updateBgmUI();
-        }
-        document.removeEventListener('touchstart', firstTouch);
-    };
-    document.addEventListener('touchstart', firstTouch, { once: false });
+    document.addEventListener('touchstart', function() {
+        startBgm();
+    }, { once: false });
 
     /* ===== 音频可视化波动条 ===== */
     if (bgmBtn.querySelector('.wave-bars')) {
@@ -1732,7 +1744,177 @@ body {
             }
         }, 150);
     }
-    /* ===== 全局星光闪烁 (暗屏) ===== */
+    /* ===== 屏4: ∞字流光环绕 ===== */
+    function initInfinityLoop(canvas) {
+        var ctx = canvas.getContext('2d');
+        var W, H, rafId = null, active = false, t = 0;
+        var trail = [];
+        var maxTrail = 40;
+
+        function resize() {
+            var rect = canvas.parentElement.getBoundingClientRect();
+            W = rect.width;
+            H = rect.height;
+            canvas.width = W;
+            canvas.height = H;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        function draw() {
+            if (!active) return;
+            ctx.clearRect(0, 0, W, H);
+            t += 0.025;
+            var cx = W / 2;
+            var cy = H / 2;
+            var a = W * 0.35;
+            var b = H * 0.35;
+
+            // Lemniscate: x = a*cos(t)/(1+sin²(t)), y = b*sin(t)*cos(t)/(1+sin²(t))
+            var denom = 1 + Math.sin(t) * Math.sin(t);
+            var x = cx + a * Math.cos(t) / denom;
+            var y = cy + b * Math.sin(t) * Math.cos(t) / denom;
+
+            trail.push({ x: x, y: y, life: 1 });
+            if (trail.length > maxTrail) trail.shift();
+
+            // 绘制拖尾
+            for (var i = 0; i < trail.length; i++) {
+                var pt = trail[i];
+                pt.life -= 0.02;
+                if (pt.life <= 0) continue;
+                var alpha = pt.life;
+                var r = 1 + alpha * 3;
+                var grd = ctx.createRadialGradient(pt.x, pt.y, 0, pt.x, pt.y, r);
+                grd.addColorStop(0, 'rgba(255,255,255,' + alpha + ')');
+                grd.addColorStop(0.3, 'rgba(232,204,110,' + alpha + ')');
+                grd.addColorStop(1, 'rgba(212,175,55,0)');
+                ctx.fillStyle = grd;
+                ctx.beginPath();
+                ctx.arc(pt.x, pt.y, r, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            rafId = requestAnimationFrame(draw);
+        }
+
+        var obs = new IntersectionObserver(function(entries) {
+            if (entries[0].isIntersecting && !active) {
+                active = true;
+                resize();
+                rafId = requestAnimationFrame(draw);
+            } else if (!entries[0].isIntersecting && active) {
+                active = false;
+                if (rafId) cancelAnimationFrame(rafId);
+                ctx.clearRect(0, 0, W, H);
+            }
+        }, { threshold: 0.1 });
+        obs.observe(canvas.parentElement);
+    }
+
+    /* ===== 屏5: 金色波浪横扫 ===== */
+    function initWaveSweep(canvas) {
+        var ctx = canvas.getContext('2d');
+        var W, H, rafId = null, active = false, phase = 0;
+        var particles = [];
+
+        function resize() {
+            var rect = canvas.parentElement.getBoundingClientRect();
+            W = rect.width;
+            H = rect.height;
+            canvas.width = W;
+            canvas.height = H;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        function draw() {
+            if (!active) return;
+            ctx.clearRect(0, 0, W, H);
+            phase += 0.02;
+            if (phase > 3.5) phase = 0;
+
+            var progress = phase / 3.5;
+
+            // 对角线波浪
+            var waveLen = W * 1.5;
+            var dx = progress * waveLen - waveLen * 0.2;
+
+            // 画主波浪线
+            ctx.save();
+            ctx.translate(W * 0.5, H * 0.5);
+            ctx.rotate((45 * Math.PI) / 180);
+            ctx.translate(-W * 0.5, -H * 0.5);
+
+            for (var band = 0; band < 3; band++) {
+                var offsetY = band * 8 - 8;
+                ctx.beginPath();
+                for (var sx = 0; sx < W * 1.8; sx += 2) {
+                    var sy = H * 0.5 + Math.sin((sx - dx) / 40 + band * 1.5) * 20 + offsetY;
+                    var dist = Math.abs(sx - dx);
+                    var alpha = Math.max(0, 1 - dist / 300);
+                    if (alpha <= 0) continue;
+                    ctx.globalAlpha = alpha * (band === 0 ? 1 : 0.4);
+                    ctx.strokeStyle = 'rgba(232,204,110,' + (alpha * 0.7) + ')';
+                    ctx.lineWidth = band === 0 ? 3 : 1.5;
+                    if (sx === 0) ctx.moveTo(sx, sy);
+                    else ctx.lineTo(sx, sy);
+                }
+                ctx.stroke();
+            }
+            ctx.globalAlpha = 1;
+            ctx.restore();
+
+            // 最亮光点
+            var hx = W * 0.5 + Math.cos(45 * Math.PI / 180) * (dx - W * 0.5);
+            var hy = H * 0.5 + Math.sin(45 * Math.PI / 180) * (dx - W * 0.5);
+            var grd = ctx.createRadialGradient(hx, hy, 0, hx, hy, 30);
+            grd.addColorStop(0, 'rgba(255,255,255,0.9)');
+            grd.addColorStop(0.2, 'rgba(232,204,110,0.6)');
+            grd.addColorStop(1, 'rgba(212,175,55,0)');
+            ctx.fillStyle = grd;
+            ctx.beginPath();
+            ctx.arc(hx, hy, 30, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 拖尾粒子
+            if (Math.random() < 0.5) {
+                particles.push({ x: hx, y: hy, vx: (Math.random()-0.5)*1.5, vy: -(Math.random()*2+1), life: 1, r: Math.random()*2+1 });
+            }
+            for (var i = particles.length - 1; i >= 0; i--) {
+                var p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life -= 0.03;
+                if (p.life <= 0) { particles.splice(i, 1); continue; }
+                ctx.globalAlpha = p.life;
+                ctx.fillStyle = 'rgba(232,204,110,' + (p.life * 0.7) + ')';
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.globalAlpha = 1;
+
+            rafId = requestAnimationFrame(draw);
+        }
+
+        var obs = new IntersectionObserver(function(entries) {
+            if (entries[0].isIntersecting && !active) {
+                active = true;
+                resize();
+                particles = [];
+                phase = 0;
+                rafId = requestAnimationFrame(draw);
+            } else if (!entries[0].isIntersecting && active) {
+                active = false;
+                if (rafId) cancelAnimationFrame(rafId);
+                ctx.clearRect(0, 0, W, H);
+            }
+        }, { threshold: 0.1 });
+        obs.observe(canvas.parentElement);
+    }
+
+    document.querySelectorAll('.infinity-loop').forEach(function(c) { initInfinityLoop(c); });
+    document.querySelectorAll('.wave-sweep').forEach(function(c) { initWaveSweep(c); });
     var darkScreens = document.querySelectorAll('.cover, .overview, .env-screen, .team-screen');
     darkScreens.forEach(function(screen) {
         function spark() {
